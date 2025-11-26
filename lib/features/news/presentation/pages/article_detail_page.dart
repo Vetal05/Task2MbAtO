@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../domain/entities/article.dart';
 
 class ArticleDetailPage extends StatelessWidget {
@@ -192,17 +193,32 @@ class ArticleDetailPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        // TODO: Open article in browser
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Opening: ${article.url}'),
-                            action: SnackBarAction(
-                              label: 'OK',
-                              onPressed: () {},
-                            ),
-                          ),
-                        );
+                      onPressed: () async {
+                        final uri = Uri.parse(article.url);
+                        try {
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Could not open article URL'),
+                                ),
+                              );
+                            }
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error opening article: $e'),
+                              ),
+                            );
+                          }
+                        }
                       },
                       icon: const Icon(Icons.open_in_browser),
                       label: const Text('Read Full Article'),

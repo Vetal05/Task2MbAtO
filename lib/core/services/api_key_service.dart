@@ -23,9 +23,19 @@ class ApiKeyService {
       print('⚠️ .env file not found, using defaults or secure storage');
     }
 
-    // Try to load from environment variables
-    final envOpenWeatherKey = dotenv.env['OPENWEATHER_API_KEY'];
-    final envNewsKey = dotenv.env['NEWS_API_KEY'];
+    // Try to load from environment variables (only if dotenv is initialized)
+    String? envOpenWeatherKey;
+    String? envNewsKey;
+    
+    try {
+      if (dotenv.isInitialized) {
+        envOpenWeatherKey = dotenv.env['OPENWEATHER_API_KEY'];
+        envNewsKey = dotenv.env['NEWS_API_KEY'];
+      }
+    } catch (e) {
+      // dotenv might not be initialized, that's okay
+      print('⚠️ dotenv not initialized, using defaults or secure storage');
+    }
 
     if (envOpenWeatherKey != null && envOpenWeatherKey.isNotEmpty) {
       _defaultOpenWeatherApiKey = envOpenWeatherKey;
@@ -53,8 +63,15 @@ class ApiKeyService {
         return storedKey;
       }
 
-      // Then try environment variables
-      final envKey = dotenv.env['OPENWEATHER_API_KEY'];
+      // Then try environment variables (only if dotenv is initialized)
+      String? envKey;
+      try {
+        if (dotenv.isInitialized) {
+          envKey = dotenv.env['OPENWEATHER_API_KEY'];
+        }
+      } catch (e) {
+        // dotenv might not be initialized, skip
+      }
       if (envKey != null && envKey.isNotEmpty) {
         // Save to secure storage for next time
         await _storage.write(key: _openWeatherApiKeyKey, value: envKey);
@@ -79,8 +96,15 @@ class ApiKeyService {
         return storedKey;
       }
 
-      // Then try environment variables
-      final envKey = dotenv.env['NEWS_API_KEY'];
+      // Then try environment variables (only if dotenv is initialized)
+      String? envKey;
+      try {
+        if (dotenv.isInitialized) {
+          envKey = dotenv.env['NEWS_API_KEY'];
+        }
+      } catch (e) {
+        // dotenv might not be initialized, skip
+      }
       if (envKey != null && envKey.isNotEmpty) {
         // Save to secure storage for next time
         await _storage.write(key: _newsApiKeyKey, value: envKey);

@@ -247,6 +247,8 @@ your_app/
 
 ## 🎤 Презентація (10 хвилин)
 
+📋 **Детальний план презентації:** [PRESENTATION_PLAN.md](./PRESENTATION_PLAN.md)
+
 ### ✅ Структура презентації:
 
 1. **Demo** основного функціоналу (3 хв)
@@ -256,10 +258,10 @@ your_app/
 
 ### ✅ Матеріали для подачі:
 
-- GitHub repository (public)
+- GitHub repository (public) - **гілка master**
 - Working CI/CD pipeline
-- APK file для тестування
-- Presentation slides
+- APK file для тестування: [Google Drive](https://drive.google.com/file/d/1s5o3wDkhYQ681uSoAgTbU_N_JFaASbFO/view?usp=sharing)
+- Presentation slides (опціонально)
 - README.md з повним описом
 
 ---
