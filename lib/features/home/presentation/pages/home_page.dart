@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage>
 
       setState(() {}); // Оновлюємо UI після ініціалізації
     } catch (e) {
-      print('Error initializing blocs: $e');
+      debugPrint('Error initializing blocs: $e');
     }
   }
 

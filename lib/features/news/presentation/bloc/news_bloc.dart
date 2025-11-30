@@ -51,7 +51,7 @@ class NewsBloc extends ChangeNotifier {
 
     try {
       // Використовуємо параметри за замовчуванням, якщо не надано
-      final articles = await this.getTopHeadlines(
+      final articles = await getTopHeadlines(
         country: country ?? 'us', // За замовчуванням новини США
         category: category,
         sources: sources,
@@ -75,7 +75,7 @@ class NewsBloc extends ChangeNotifier {
     _emit(NewsLoading());
 
     try {
-      final articles = await this.getArticlesByCategory(category);
+      final articles = await getArticlesByCategory(category);
       _emit(NewsLoaded(articles));
     } catch (e) {
       _emit(NewsError(e.toString()));
@@ -86,7 +86,7 @@ class NewsBloc extends ChangeNotifier {
     _emit(NewsLoading());
 
     try {
-      final articles = await this.searchArticles(query);
+      final articles = await searchArticles(query);
       _emit(NewsLoaded(articles));
     } catch (e) {
       _emit(NewsError(e.toString()));
@@ -95,7 +95,7 @@ class NewsBloc extends ChangeNotifier {
 
   Future<void> saveArticleData(Article article) async {
     try {
-      await this.saveArticle(article);
+      await saveArticle(article);
       _emit(ArticleSaved());
     } catch (e) {
       _emit(NewsError(e.toString()));
@@ -106,7 +106,7 @@ class NewsBloc extends ChangeNotifier {
     _emit(NewsLoading());
 
     try {
-      final articles = await this.getSavedArticles();
+      final articles = await getSavedArticles();
       _emit(NewsLoaded(articles));
     } catch (e) {
       _emit(NewsError(e.toString()));

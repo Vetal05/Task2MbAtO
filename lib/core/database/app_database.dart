@@ -68,7 +68,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   // Конструктор для тестування з користувацькою базою даних
-  AppDatabase.test(LazyDatabase db) : super(db);
+  AppDatabase.test(super.db);
 
   @override
   int get schemaVersion => 1;

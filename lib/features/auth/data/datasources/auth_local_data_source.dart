@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/entities/user_settings.dart';
@@ -28,7 +29,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     } catch (e) {
       // В тестовому середовищі Hive може бути не ініціалізовано
       // Це прийнятно - box залишиться null і методи оброблять це
-      print('Warning: Could not initialize Hive box: $e');
+      debugPrint('Warning: Could not initialize Hive box: $e');
     }
   }
 
@@ -56,7 +57,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       };
       await box.put(_userKey, userMap);
     } catch (e) {
-      print('Error saving user to Hive: $e');
+      debugPrint('Error saving user to Hive: $e');
       // В тестовому середовищі не перекидаємо помилку
       if (!e.toString().contains('HiveError')) {
         rethrow;
@@ -106,7 +107,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         settings: settings,
       );
     } catch (e) {
-      print('Error getting cached user from Hive: $e');
+      debugPrint('Error getting cached user from Hive: $e');
       return null;
     }
   }
@@ -121,7 +122,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       }
       await box.delete(_userKey);
     } catch (e) {
-      print('Error clearing user from Hive: $e');
+      debugPrint('Error clearing user from Hive: $e');
       // В тестовому середовищі не перекидаємо помилки Hive
     }
   }

@@ -43,7 +43,7 @@ class ArticleDetailPage extends StatelessWidget {
           children: [
             // Зображення статті
             if (article.imageUrl != null)
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 250,
                 child: Image.network(
@@ -93,14 +93,16 @@ class ArticleDetailPage extends StatelessWidget {
                 ),
               )
             else
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 200,
-                color: Colors.grey[300],
-                child: const Icon(
-                  Icons.image_not_supported,
-                  size: 80,
-                  color: Colors.grey,
+                child: Container(
+                  color: Colors.grey[300],
+                  child: const Icon(
+                    Icons.image_not_supported,
+                    size: 80,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
 

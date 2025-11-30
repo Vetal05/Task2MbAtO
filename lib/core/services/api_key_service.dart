@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../constants/app_constants.dart';
@@ -20,7 +21,7 @@ class ApiKeyService {
       await dotenv.load(fileName: '.env');
     } catch (e) {
       // .env файл може не існувати, це нормально
-      print('⚠️ .env file not found, using defaults or secure storage');
+      debugPrint('⚠️ .env file not found, using defaults or secure storage');
     }
 
     // Намагаємося завантажити з змінних середовища (тільки якщо dotenv ініціалізовано)
@@ -34,7 +35,7 @@ class ApiKeyService {
       }
     } catch (e) {
       // dotenv може бути не ініціалізовано, це нормально
-      print('⚠️ dotenv not initialized, using defaults or secure storage');
+      debugPrint('⚠️ dotenv not initialized, using defaults or secure storage');
     }
 
     if (envOpenWeatherKey != null && envOpenWeatherKey.isNotEmpty) {
@@ -81,7 +82,7 @@ class ApiKeyService {
       // Резервний варіант до констант
       return _defaultOpenWeatherApiKey;
     } catch (e) {
-      print('⚠️ Error getting OpenWeather API key: $e');
+      debugPrint('⚠️ Error getting OpenWeather API key: $e');
       return _defaultOpenWeatherApiKey;
     }
   }
@@ -114,7 +115,7 @@ class ApiKeyService {
       // Резервний варіант до констант
       return _defaultNewsApiKey;
     } catch (e) {
-      print('⚠️ Error getting News API key: $e');
+      debugPrint('⚠️ Error getting News API key: $e');
       return _defaultNewsApiKey;
     }
   }
@@ -125,7 +126,7 @@ class ApiKeyService {
       await _storage.write(key: _openWeatherApiKeyKey, value: key);
       _defaultOpenWeatherApiKey = key;
     } catch (e) {
-      print('⚠️ Error saving OpenWeather API key: $e');
+      debugPrint('⚠️ Error saving OpenWeather API key: $e');
     }
   }
 
@@ -135,7 +136,7 @@ class ApiKeyService {
       await _storage.write(key: _newsApiKeyKey, value: key);
       _defaultNewsApiKey = key;
     } catch (e) {
-      print('⚠️ Error saving News API key: $e');
+      debugPrint('⚠️ Error saving News API key: $e');
     }
   }
 
@@ -145,7 +146,7 @@ class ApiKeyService {
       await _storage.delete(key: _openWeatherApiKeyKey);
       await _storage.delete(key: _newsApiKeyKey);
     } catch (e) {
-      print('⚠️ Error clearing API keys: $e');
+      debugPrint('⚠️ Error clearing API keys: $e');
     }
   }
 }

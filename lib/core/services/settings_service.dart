@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../di/injection.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/domain/entities/user_settings.dart';
@@ -12,7 +13,7 @@ class SettingsService {
       _authRepository = serviceLocator.get<AuthRepository>();
     } catch (e) {
       // Service locator може бути ще не ініціалізовано
-      print('SettingsService: AuthRepository not available yet');
+      debugPrint('SettingsService: AuthRepository not available yet');
     }
   }
 
@@ -46,7 +47,7 @@ class SettingsService {
     try {
       await repo.saveUserSettings(settings);
     } catch (e) {
-      print('SettingsService: Failed to save settings: $e');
+      debugPrint('SettingsService: Failed to save settings: $e');
       rethrow;
     }
   }

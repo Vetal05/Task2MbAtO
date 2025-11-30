@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:drift/drift.dart';
 import '../../../../core/database/app_database.dart';
 import '../models/article_model.dart';
@@ -95,7 +96,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
             );
       }
     } catch (e) {
-      print('Error saving article: $e');
+      debugPrint('Error saving article: $e');
     }
   }
 
@@ -115,7 +116,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
         )).write(const NewsCacheCompanion(isSaved: Value(false)));
       }
     } catch (e) {
-      print('Error removing article: $e');
+      debugPrint('Error removing article: $e');
     }
   }
 
