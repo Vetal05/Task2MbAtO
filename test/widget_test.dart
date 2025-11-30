@@ -27,11 +27,12 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const WeatherNewsApp());
     
-    // Just pump once to build the widget tree
+    // Pump multiple times to allow async operations in initState to complete
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pump(const Duration(milliseconds: 200));
 
     // Verify that app is built (at minimum, MaterialApp should be present)
-    // Don't wait for all async operations to complete
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 }
