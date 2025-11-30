@@ -503,7 +503,7 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
         tempRange = 10;
       }
     } catch (e) {
-      print('Error calculating temperature range: $e');
+      debugPrint('Error calculating temperature range: $e');
       return const Center(
         child: Text(
           'Error loading temperature data',
@@ -614,7 +614,7 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
         maxPrecipitation = 1.0; // Set to 100% for visual representation
       }
     } catch (e) {
-      print('Error calculating max precipitation: $e');
+      debugPrint('Error calculating max precipitation: $e');
       return const Center(
         child: Text(
           'Error loading precipitation data',
@@ -721,7 +721,7 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
         maxWindSpeed = 10.0; // Set default max for visual representation
       }
     } catch (e) {
-      print('Error calculating max wind speed: $e');
+      debugPrint('Error calculating max wind speed: $e');
       return const Center(
         child: Text(
           'Error loading wind data',
