@@ -36,16 +36,16 @@ class _HomePageState extends State<HomePage>
 
   Future<void> _initializeBlocs() async {
     try {
-      // Initialize settings service
+      // Ініціалізуємо сервіс налаштувань
       await SettingsService.init();
 
       _weatherBloc = serviceLocator.get<WeatherBloc>();
       _newsBloc = serviceLocator.get<NewsBloc>();
 
-      // Load settings from user account
+      // Завантажуємо налаштування з облікового запису користувача
       _isCelsius = await SettingsService.getIsCelsius();
 
-      // Set default city from user settings or fallback to Kyiv
+      // Встановлюємо місто за замовчуванням з налаштувань користувача або резервний варіант - Київ
       final defaultCityName = await SettingsService.getDefaultCityName();
       final defaultCityLat = await SettingsService.getDefaultCityLat();
       final defaultCityLon = await SettingsService.getDefaultCityLon();
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage>
           population: defaultCityPopulation,
         );
       } else {
-        // Always use Kyiv as default to prevent multiple API calls
+        // Завжди використовуємо Київ за замовчуванням, щоб запобігти множинним API викликам
         _selectedCity = UkraineCity(
           name: 'Київ',
           region: 'Київська область',
@@ -76,18 +76,18 @@ class _HomePageState extends State<HomePage>
         );
       }
 
-      // Load initial data using One Call API
+      // Завантажуємо початкові дані, використовуючи One Call API
       _weatherBloc?.getWeatherForUkrainianCity(_selectedCity!);
       _newsBloc?.getTopHeadlinesData(country: 'us', category: 'technology');
 
-      setState(() {}); // Update UI after initialization
+      setState(() {}); // Оновлюємо UI після ініціалізації
     } catch (e) {
       print('Error initializing blocs: $e');
     }
   }
 
   void _onCitySelected(UkraineCity city) {
-    // Only update if city actually changed
+    // Оновлюємо тільки якщо місто дійсно змінилося
     if (_selectedCity?.name != city.name ||
         _selectedCity?.latitude != city.latitude ||
         _selectedCity?.longitude != city.longitude) {
@@ -105,9 +105,9 @@ class _HomePageState extends State<HomePage>
   }
 
   void _onDefaultCityChanged(UkraineCity? city) {
-    // Only update if city actually changed
+    // Оновлюємо тільки якщо місто дійсно змінилося
     if (city == null) {
-      // If no default city, use Kyiv
+      // Якщо немає міста за замовчуванням, використовуємо Київ
       if (_selectedCity?.name != 'Київ') {
         setState(() {
           _selectedCity = UkraineCity(
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage>
   @override
   void dispose() {
     _tabController.dispose();
-    // Don't dispose BLoCs - they are singletons managed by serviceLocator
+    // Не видаляємо BLoC'и - вони є синглтонами, керованими serviceLocator
     // _weatherBloc?.dispose();
     // _newsBloc?.dispose();
     super.dispose();
@@ -141,11 +141,9 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor:
-          Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF121212)
-              : Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Weather & News'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -158,7 +156,7 @@ class _HomePageState extends State<HomePage>
           ],
         ),
         actions: [
-          // Temperature toggle button
+          // Кнопка перемикання температури
           if (_tabController.index == 0)
             IconButton(
               icon: Text(
@@ -178,9 +176,9 @@ class _HomePageState extends State<HomePage>
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              // Refresh data based on current tab
+              // Оновлюємо дані залежно від поточної вкладки
               if (_tabController.index == 0) {
-                // Weather tab
+                // Вкладка погоди
                 if (_selectedCity != null) {
                   _weatherBloc?.getWeatherForUkrainianCity(_selectedCity!);
                 } else {
@@ -190,7 +188,7 @@ class _HomePageState extends State<HomePage>
                   );
                 }
               } else {
-                // News tab
+                // Вкладка новин
                 _newsBloc?.getTopHeadlinesData();
               }
             },
@@ -205,11 +203,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _buildWeatherTab() {
+    final theme = Theme.of(context);
     return Container(
-      color:
-          Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF121212)
-              : Colors.white,
+      color: theme.scaffoldBackgroundColor,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -222,7 +218,9 @@ class _HomePageState extends State<HomePage>
                     'Погода в Україні',
                     style: TextStyle(
                       fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: Theme.of(context).brightness == Brightness.light
+                          ? FontWeight.w700
+                          : FontWeight.bold,
                       color:
                           Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
@@ -233,12 +231,12 @@ class _HomePageState extends State<HomePage>
                 IconButton(
                   icon: const Icon(Icons.location_on, color: Colors.yellow),
                   onPressed: () {
-                    // Show city search dialog
+                    // Показуємо діалог пошуку міста
                     showDialog(
                       context: context,
                       builder:
                           (context) => Dialog(
-                            backgroundColor: const Color(0xFF1A1A1A),
+                            backgroundColor: Theme.of(context).cardColor,
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.height * 0.7,
@@ -304,11 +302,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _buildNewsTab() {
+    final theme = Theme.of(context);
     return Container(
-      color:
-          Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF121212)
-              : Colors.white,
+      color: theme.scaffoldBackgroundColor,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -318,7 +314,9 @@ class _HomePageState extends State<HomePage>
               'Останні новини',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: Theme.of(context).brightness == Brightness.light
+                    ? FontWeight.w700
+                    : FontWeight.bold,
                 color:
                     Theme.of(context).brightness == Brightness.dark
                         ? Colors.white

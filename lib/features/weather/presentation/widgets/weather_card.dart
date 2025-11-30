@@ -84,7 +84,7 @@ class _WeatherCardState extends State<WeatherCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with city name and country
+              // Заголовок з назвою міста та країни
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -103,7 +103,7 @@ class _WeatherCardState extends State<WeatherCard> {
               ),
               const SizedBox(height: 16),
 
-              // Day selector at the bottom
+              // Вибір дня внизу
               if (forecasts.isNotEmpty) ...[
                 const SizedBox(height: 16),
                 SizedBox(
@@ -150,7 +150,7 @@ class _WeatherCardState extends State<WeatherCard> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              // Weather icon
+                              // Іконка погоди
                               if (isToday)
                                 Image.network(
                                   'https://openweathermap.org/img/wn/${weather.icon}@2x.png',
@@ -178,7 +178,7 @@ class _WeatherCardState extends State<WeatherCard> {
                                   },
                                 ),
                               const SizedBox(height: 4),
-                              // Temperature range
+                              // Діапазон температури
                               if (isToday)
                                 Text(
                                   '${weather.temperature.toStringAsFixed(0)}°',
@@ -212,7 +212,7 @@ class _WeatherCardState extends State<WeatherCard> {
                 ),
               ],
 
-              // Weather details for selected day
+              // Деталі погоди для вибраного дня
               _buildSelectedDayWeather(weather, forecasts),
             ],
           ),
@@ -230,10 +230,10 @@ class _WeatherCardState extends State<WeatherCard> {
 
   Widget _buildSelectedDayWeather(weather, forecasts) {
     if (_selectedDayIndex == 0) {
-      // Show today's weather
+      // Показуємо сьогоднішню погоду
       return _buildTodayWeather(weather);
     } else {
-      // Show forecast for selected day
+      // Показуємо прогноз для вибраного дня
       final forecastIndex = _selectedDayIndex - 1;
       if (forecastIndex < forecasts.length) {
         return _buildForecastWeather(forecasts[forecastIndex]);

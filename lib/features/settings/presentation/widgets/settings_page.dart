@@ -62,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder:
           (context) => Dialog(
-            backgroundColor: const Color(0xFF1A1A1A),
+            backgroundColor: Theme.of(context).cardColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -101,15 +101,19 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Налаштування',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: theme.appBarTheme.foregroundColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: const Color(0xFF1A1A1A),
-        foregroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        foregroundColor: theme.appBarTheme.foregroundColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -154,6 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildThemeCard() {
+    final theme = Theme.of(context);
     final themeProvider = ThemeProvider.of(context);
     final currentTheme = themeProvider?.themeMode ?? ThemeMode.dark;
 
@@ -161,19 +166,23 @@ class _SettingsPageState extends State<SettingsPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(
+          color: theme.dividerColor,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Оберіть тему інтерфейсу',
             style: TextStyle(
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: theme.brightness == Brightness.light
+                  ? FontWeight.w600
+                  : FontWeight.w500,
             ),
           ),
           const SizedBox(height: 16),
@@ -257,25 +266,30 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildLogoutCard() {
+    final theme = Theme.of(context);
     final authBloc = serviceLocator.get<AuthBloc>();
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(
+          color: theme.dividerColor,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Вихід з облікового запису',
             style: TextStyle(
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: theme.brightness == Brightness.light
+                  ? FontWeight.w600
+                  : FontWeight.w500,
             ),
           ),
           const SizedBox(height: 16),
@@ -303,34 +317,41 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildSectionTitle(String title) {
+    final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
     return Text(
       title,
-      style: const TextStyle(
-        color: Colors.white,
+      style: TextStyle(
+        color: theme.colorScheme.onSurface,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: isLight ? FontWeight.w700 : FontWeight.bold,
       ),
     );
   }
 
   Widget _buildTemperatureUnitCard() {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(
+          color: theme.dividerColor,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Оберіть одиницю температури',
             style: TextStyle(
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: theme.brightness == Brightness.light
+                  ? FontWeight.w600
+                  : FontWeight.w500,
             ),
           ),
           const SizedBox(height: 16),
@@ -403,23 +424,28 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildDefaultCityCard() {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(
+          color: theme.dividerColor,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Місто, яке відкриватиметься автоматично',
             style: TextStyle(
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: theme.brightness == Brightness.light
+                  ? FontWeight.w600
+                  : FontWeight.w500,
             ),
           ),
           const SizedBox(height: 16),
@@ -513,6 +539,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildCurrentDateCard() {
+    final theme = Theme.of(context);
     final now = DateTime.now();
     final formattedDate =
         '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
@@ -522,19 +549,21 @@ class _SettingsPageState extends State<SettingsPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Сьогоднішня дата',
             style: TextStyle(
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: theme.brightness == Brightness.light
+                  ? FontWeight.w600
+                  : FontWeight.w500,
             ),
           ),
           const SizedBox(height: 16),
@@ -547,15 +576,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Text(
                     dayOfWeek,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     formattedDate,
-                    style: const TextStyle(color: Colors.grey, fontSize: 16),
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),

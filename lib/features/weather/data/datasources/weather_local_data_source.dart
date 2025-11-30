@@ -33,12 +33,12 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
 
       if (cached == null) return null;
 
-      // Parse from JSON for easy conversion
+      // Парсимо з JSON для легкого перетворення
       try {
         final jsonMap = json.decode(cached.weatherJson) as Map<String, dynamic>;
         return WeatherModel.fromJson(jsonMap);
       } catch (e) {
-        // Fallback: construct from database fields
+        // Резервний варіант: конструюємо з полів бази даних
         return WeatherModel(
           id: cached.weatherId,
           main: cached.main,
@@ -69,10 +69,10 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
   @override
   Future<void> cacheWeather(WeatherModel weather) async {
     try {
-      // Delete old cache (keep only latest)
+      // Видаляємо старий кеш (залишаємо тільки останній)
       await _database.delete(_database.weatherCache).go();
 
-      // Insert new cache
+      // Вставляємо новий кеш
       final weatherJson = json.encode(weather.toJson());
       await _database
           .into(_database.weatherCache)
@@ -101,7 +101,7 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
             ),
           );
     } catch (e) {
-      // Handle error silently or log
+      // Обробляємо помилку безшумно або логуємо
       print('Error caching weather: $e');
     }
   }
@@ -133,7 +133,7 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
   @override
   Future<void> saveCity(LocationModel city) async {
     try {
-      // Check if city already exists
+      // Перевіряємо, чи місто вже існує
       final existing =
           await (_database.select(_database.citiesCache)..where(
             (t) => t.name.equals(city.name) & t.country.equals(city.country),
@@ -196,12 +196,12 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
   @override
   Future<void> setCurrentLocation(LocationModel location) async {
     try {
-      // Remove old current location
+      // Видаляємо стару поточну локацію
       await (_database.update(_database.citiesCache)..where(
         (t) => t.isCurrentLocation.equals(true),
       )).write(const CitiesCacheCompanion(isCurrentLocation: Value(false)));
 
-      // Check if location already exists
+      // Перевіряємо, чи локація вже існує
       final existing =
           await (_database.select(_database.citiesCache)..where(
             (t) =>
@@ -210,12 +210,12 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
           )).getSingleOrNull();
 
       if (existing != null) {
-        // Update existing
+        // Оновлюємо існуючу
         await (_database.update(_database.citiesCache)..where(
           (t) => t.id.equals(existing.id),
         )).write(CitiesCacheCompanion(isCurrentLocation: const Value(true)));
       } else {
-        // Insert new
+        // Вставляємо нову
         await _database
             .into(_database.citiesCache)
             .insert(

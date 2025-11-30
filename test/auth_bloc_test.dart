@@ -6,6 +6,8 @@ import 'package:weather_news_app/core/di/injection.dart';
 import 'package:weather_news_app/features/auth/presentation/bloc/auth_bloc.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('AuthBloc Tests', () {
     late AuthBloc authBloc;
     late AppDatabase testDatabase;
@@ -16,7 +18,8 @@ void main() {
         LazyDatabase(() async => NativeDatabase.memory()),
       );
       // Initialize dependencies for testing with test database
-      await configureDependencies(testDatabase: testDatabase);
+      // Skip Hive initialization to avoid plugin issues
+      await configureDependencies(testDatabase: testDatabase, skipHiveInit: true);
     });
 
     tearDownAll(() async {

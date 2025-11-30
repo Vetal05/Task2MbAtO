@@ -5,7 +5,7 @@ abstract class NetworkInfo {
 class NetworkInfoImpl implements NetworkInfo {
   @override
   Future<bool> get isConnected async {
-    // For now, we'll assume network is always available
+    // Поки що припускаємо, що мережа завжди доступна
     return true;
   }
 }

@@ -5,7 +5,7 @@ import '../network/dio_client.dart';
 import '../database/app_database.dart';
 import '../storage/hive_service.dart';
 
-// Weather
+// Погода
 import '../../features/weather/data/datasources/weather_remote_data_source.dart';
 import '../../features/weather/data/datasources/weather_local_data_source.dart';
 import '../../features/weather/data/repositories/weather_repository_impl.dart';
@@ -19,7 +19,7 @@ import '../../features/weather/domain/usecases/get_one_call_weather.dart';
 import '../../features/weather/domain/usecases/get_one_call_raw_data.dart';
 import '../../features/weather/presentation/bloc/weather_bloc.dart';
 
-// News
+// Новини
 import '../../features/news/data/datasources/news_remote_data_source.dart';
 import '../../features/news/data/datasources/news_local_data_source.dart';
 import '../../features/news/data/repositories/news_repository_impl.dart';
@@ -31,7 +31,7 @@ import '../../features/news/domain/usecases/save_article.dart';
 import '../../features/news/domain/usecases/get_saved_articles.dart';
 import '../../features/news/presentation/bloc/news_bloc.dart';
 
-// Auth
+// Автентифікація
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/datasources/auth_local_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -40,7 +40,7 @@ import '../../features/auth/domain/usecases/login_user.dart';
 import '../../features/auth/domain/usecases/register_user.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 
-// Simple dependency container
+// Простий контейнер залежностей
 class ServiceLocator {
   static final ServiceLocator _instance = ServiceLocator._internal();
   factory ServiceLocator() => _instance;
@@ -65,28 +65,37 @@ class ServiceLocator {
 
 final serviceLocator = ServiceLocator();
 
-Future<void> configureDependencies({AppDatabase? testDatabase}) async {
-  // Initialize Hive first (must be done before opening boxes)
-  await HiveService.init();
+Future<void> configureDependencies({
+  AppDatabase? testDatabase,
+  bool skipHiveInit = false,
+}) async {
+  // Ініціалізуємо Hive спочатку (має бути зроблено перед відкриттям boxes)
+  // Пропускаємо в тестовому середовищі, якщо потрібно
+  if (!skipHiveInit) {
+    await HiveService.init();
+  } else {
+    // Ініціалізуємо Hive для тестування (без path_provider)
+    await HiveService.init(forTesting: true);
+  }
 
-  // Initialize database (use test database if provided)
+  // Ініціалізуємо базу даних (використовуємо тестову БД, якщо надано)
   final database = testDatabase ?? AppDatabase();
   serviceLocator.register<AppDatabase>(database);
 
-  // Register core dependencies
+  // Реєструємо основні залежності
   serviceLocator.register<NetworkInfo>(NetworkInfoImpl());
 
-  // Register HTTP clients (keeping http for backward compatibility)
+  // Реєструємо HTTP клієнти (залишаємо http для зворотної сумісності)
   serviceLocator.register<http.Client>(http.Client());
 
-  // Register Dio client with interceptors
+  // Реєструємо Dio клієнт з interceptors
   serviceLocator.register<DioClient>(DioClient());
 
-  // Register Auth data sources
+  // Реєструємо джерела даних для автентифікації
   serviceLocator.register<AuthRemoteDataSource>(AuthRemoteDataSourceImpl());
   serviceLocator.register<AuthLocalDataSource>(AuthLocalDataSourceImpl());
 
-  // Register Weather data sources
+  // Реєструємо джерела даних для погоди
   serviceLocator.register<WeatherRemoteDataSource>(
     WeatherRemoteDataSourceImpl(dioClient: serviceLocator.get<DioClient>()),
   );
@@ -94,7 +103,7 @@ Future<void> configureDependencies({AppDatabase? testDatabase}) async {
     WeatherLocalDataSourceImpl(database: serviceLocator.get<AppDatabase>()),
   );
 
-  // Register News data sources
+  // Реєструємо джерела даних для новин
   serviceLocator.register<NewsRemoteDataSource>(
     NewsRemoteDataSourceImpl(dioClient: serviceLocator.get<DioClient>()),
   );
@@ -102,7 +111,7 @@ Future<void> configureDependencies({AppDatabase? testDatabase}) async {
     NewsLocalDataSourceImpl(database: serviceLocator.get<AppDatabase>()),
   );
 
-  // Register repositories
+  // Реєструємо репозиторії
   serviceLocator.register<WeatherRepository>(
     WeatherRepositoryImpl(
       remoteDataSource: serviceLocator.get<WeatherRemoteDataSource>(),
@@ -119,7 +128,7 @@ Future<void> configureDependencies({AppDatabase? testDatabase}) async {
     ),
   );
 
-  // Register use cases
+  // Реєструємо use cases
   serviceLocator.register<GetCurrentWeather>(
     GetCurrentWeather(serviceLocator.get<WeatherRepository>()),
   );
@@ -165,7 +174,7 @@ Future<void> configureDependencies({AppDatabase? testDatabase}) async {
     GetSavedArticles(serviceLocator.get<NewsRepository>()),
   );
 
-  // Register Auth repository
+  // Реєструємо репозиторій автентифікації
   serviceLocator.register<AuthRepository>(
     AuthRepositoryImpl(
       remoteDataSource: serviceLocator.get<AuthRemoteDataSource>(),
@@ -174,7 +183,7 @@ Future<void> configureDependencies({AppDatabase? testDatabase}) async {
     ),
   );
 
-  // Register Auth use cases
+  // Реєструємо use cases для автентифікації
   serviceLocator.register<LoginUser>(
     LoginUser(serviceLocator.get<AuthRepository>()),
   );
@@ -182,7 +191,7 @@ Future<void> configureDependencies({AppDatabase? testDatabase}) async {
     RegisterUser(serviceLocator.get<AuthRepository>()),
   );
 
-  // Register BLoCs
+  // Реєструємо BLoC'и
   serviceLocator.register<WeatherBloc>(
     WeatherBloc(
       getCurrentWeather: serviceLocator.get<GetCurrentWeather>(),

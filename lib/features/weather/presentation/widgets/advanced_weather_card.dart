@@ -39,7 +39,7 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
     setState(() {});
   }
 
-  // Temperature conversion functions
+  // Функції конвертації температури
   double _convertTemperature(double celsius) {
     if (widget.isCelsius) {
       return celsius;
@@ -298,10 +298,10 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
 
   Widget _buildSelectedDayWeather(weather, forecasts) {
     if (_selectedDayIndex == 0) {
-      // Show today's weather
+      // Показуємо сьогоднішню погоду
       return _buildCurrentWeather(weather);
     } else {
-      // Show forecast for selected day
+      // Показуємо прогноз для вибраного дня
       final forecastIndex = _selectedDayIndex - 1;
       if (forecastIndex >= 0 && forecastIndex < forecasts.length) {
         return _buildForecastWeather(forecasts[forecastIndex]);
@@ -437,22 +437,22 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
       );
     }
 
-    // Get data for selected day
+    // Отримуємо дані для вибраного дня
     List graphData;
     if (_selectedDayIndex == 0) {
-      // Today - use all hourly forecasts (up to 48 hours)
+      // Сьогодні - використовуємо всі погодинні прогнози (до 48 годин)
       graphData = hourlyForecasts.toList();
     } else {
-      // Selected forecast day - create mock hourly data from daily forecast
+      // Вибраний день прогнозу - створюємо мокові погодинні дані з денного прогнозу
       final forecastIndex = _selectedDayIndex - 1;
       if (forecastIndex >= 0 && forecastIndex < forecasts.length) {
         final forecast = forecasts[forecastIndex];
-        // Create 24 hourly data points for the selected day with smooth variation
+        // Створюємо 24 погодинні точки даних для вибраного дня з плавною варіацією
         graphData = List.generate(24, (index) {
-          // Create smooth temperature curve (higher during day, lower at night)
+          // Створюємо плавну криву температури (вища вдень, нижча вночі)
           final hour = index % 24;
           final dayProgress = hour / 24.0;
-          // Temperature peaks around midday (0.5), lower at night
+          // Температура досягає піку близько полудня (0.5), нижча вночі
           final dayFactor = 0.5 + 0.5 * (1 - (dayProgress - 0.5).abs() * 2);
           final tempVariation =
               (forecast.maxTemperature - forecast.minTemperature) * dayFactor;
@@ -495,9 +495,9 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
       maxTemp = temps.reduce((a, b) => a > b ? a : b);
       tempRange = maxTemp - minTemp;
 
-      // Handle case when all temperatures are the same (tempRange = 0)
+      // Обробляємо випадок, коли всі температури однакові (tempRange = 0)
       if (tempRange == 0) {
-        // Add padding to create a visible range
+        // Додаємо відступ, щоб створити видимий діапазон
         minTemp = minTemp - 5;
         maxTemp = maxTemp + 5;
         tempRange = 10;
@@ -512,7 +512,7 @@ class _AdvancedWeatherCardState extends State<AdvancedWeatherCard>
       );
     }
 
-    // Calculate width for scrollable graph (120 pixels per data point)
+    // Обчислюємо ширину для прокручуваного графіка (120 пікселів на точку даних)
     final graphWidth = graphData.length * 120.0;
     final graphHeight = 240.0;
 

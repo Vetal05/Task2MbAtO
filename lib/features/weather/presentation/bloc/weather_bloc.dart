@@ -86,7 +86,7 @@ class WeatherBloc extends ChangeNotifier {
     _emit(ForecastLoading());
 
     try {
-      // Use mock data for demonstration
+      // Використовуємо мокові дані для демонстрації
       final forecast = WeatherMockDataSource.generateMockForecast();
       _forecasts = forecast;
 
@@ -99,7 +99,7 @@ class WeatherBloc extends ChangeNotifier {
         }
       }
 
-      // Update current weather state with forecasts if it exists
+      // Оновлюємо поточний стан погоди з прогнозами, якщо він існує
       if (_state is WeatherLoaded) {
         final currentState = _state as WeatherLoaded;
         _emit(WeatherLoaded(currentState.weather, forecasts: _forecasts));
@@ -150,7 +150,7 @@ class WeatherBloc extends ChangeNotifier {
     }
   }
 
-  // New method for One Call API
+  // Новий метод для One Call API
   Future<void> getOneCallWeatherData({
     required double latitude,
     required double longitude,
@@ -158,13 +158,13 @@ class WeatherBloc extends ChangeNotifier {
     _emit(WeatherLoading());
 
     try {
-      // Make a single One Call API request to get all data
+      // Робимо один запит One Call API, щоб отримати всі дані
       final oneCallData = await getOneCallRawData(
         latitude: latitude,
         longitude: longitude,
       );
 
-      // Extract weather, forecasts, and hourly forecasts from the single response
+      // Витягуємо погоду, прогнози та погодинні прогнози з однієї відповіді
       final weather = oneCallData.toEntity();
       _forecasts = oneCallData.toForecastEntities();
       _hourlyForecasts = oneCallData.toHourlyForecastEntities();
@@ -187,23 +187,23 @@ class WeatherBloc extends ChangeNotifier {
     }
   }
 
-  // Method for Ukrainian cities
+  // Метод для українських міст
   Future<void> getWeatherForUkrainianCity(UkraineCity city) async {
     _emit(WeatherLoading());
 
     try {
-      // Make a single One Call API request to get all data
+      // Робимо один запит One Call API, щоб отримати всі дані
       final oneCallData = await getOneCallRawData(
         latitude: city.latitude,
         longitude: city.longitude,
       );
 
-      // Extract weather, forecasts, and hourly forecasts from the single response
+      // Витягуємо погоду, прогнози та погодинні прогнози з однієї відповіді
       final weather = oneCallData.toEntity();
       _forecasts = oneCallData.toForecastEntities();
       _hourlyForecasts = oneCallData.toHourlyForecastEntities();
 
-      // Update weather with city name
+      // Оновлюємо погоду з назвою міста
       final updatedWeather = Weather(
         id: weather.id,
         main: weather.main,

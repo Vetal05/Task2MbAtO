@@ -28,7 +28,7 @@ class AuthRepositoryImpl implements AuthRepository {
         throw ServerFailure(e.toString());
       }
     } else {
-      // Try to use cached user if offline
+      // Намагаємося використати закешованого користувача, якщо офлайн
       final cachedUser = await localDataSource.getCachedUser();
       if (cachedUser != null && cachedUser.email == email) {
         return cachedUser;
@@ -80,14 +80,14 @@ class AuthRepositoryImpl implements AuthRepository {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.saveUserSettings(user.id, settings);
-        // Update cached user with new settings
+        // Оновлюємо закешованого користувача з новими налаштуваннями
         final updatedUser = user.copyWith(settings: settings);
         await localDataSource.saveUser(updatedUser);
       } catch (e) {
         throw ServerFailure(e.toString());
       }
     } else {
-      // Save to local cache if offline (will sync when online)
+      // Зберігаємо в локальний кеш, якщо офлайн (синхронізується, коли буде онлайн)
       final updatedUser = user.copyWith(settings: settings);
       await localDataSource.saveUser(updatedUser);
       throw const NetworkFailure('No internet connection');
@@ -104,16 +104,16 @@ class AuthRepositoryImpl implements AuthRepository {
     if (await networkInfo.isConnected) {
       try {
         final settings = await remoteDataSource.getUserSettings(user.id);
-        // Update cached user with latest settings
+        // Оновлюємо закешованого користувача з останніми налаштуваннями
         final updatedUser = user.copyWith(settings: settings);
         await localDataSource.saveUser(updatedUser);
         return settings;
       } catch (e) {
-        // Fallback to cached settings
+        // Резервний варіант до закешованих налаштувань
         return user.settings;
       }
     } else {
-      // Return cached settings if offline
+      // Повертаємо закешовані налаштування, якщо офлайн
       return user.settings;
     }
   }

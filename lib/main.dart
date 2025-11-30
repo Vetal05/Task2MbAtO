@@ -10,16 +10,16 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize API keys service (loads from .env or secure storage)
+  // Ініціалізуємо сервіс API ключів (завантажує з .env або безпечного сховища)
   await ApiKeyService.init();
 
-  // Load API keys into AppConstants for synchronous access
+  // Завантажуємо API ключі в AppConstants для синхронного доступу
   await AppConstants.initializeApiKeys();
 
-  // Configure dependencies first (needed for SettingsService)
+  // Налаштовуємо залежності спочатку (потрібно для SettingsService)
   await configureDependencies();
 
-  // Initialize settings (needs AuthRepository from service locator)
+  // Ініціалізуємо налаштування (потребує AuthRepository з service locator)
   await SettingsService.init();
 
   runApp(const WeatherNewsApp());
@@ -65,7 +65,7 @@ class _WeatherNewsAppState extends State<WeatherNewsApp> {
   }
 
   void _onAuthStateChanged() {
-    // Reload theme when user logs in/out
+    // Перезавантажуємо тему, коли користувач входить/виходить
     _loadThemeMode();
     setState(() {});
   }
@@ -93,7 +93,7 @@ class _WeatherNewsAppState extends State<WeatherNewsApp> {
     } else if (authState is AuthUnauthenticated) {
       homeWidget = LoginPage(authBloc: _authBloc);
     } else {
-      // Loading state (AuthInitial or AuthLoading)
+      // Стан завантаження (AuthInitial або AuthLoading)
       homeWidget = Scaffold(
         backgroundColor: const Color(0xFF121212),
         body: const Center(
@@ -112,6 +112,41 @@ class _WeatherNewsAppState extends State<WeatherNewsApp> {
           brightness: Brightness.light,
         ),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue.shade50,
+          foregroundColor: Colors.blue.shade900,
+          elevation: 0,
+          titleTextStyle: TextStyle(
+            color: Colors.blue.shade900,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        cardTheme: CardTheme(
+          color: Colors.grey.shade50,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        textTheme: TextTheme(
+          displayLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+          displayMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          displaySmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          headlineLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          headlineMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+          headlineSmall: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+          titleLarge: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          titleMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          titleSmall: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+          bodyLarge: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          bodyMedium: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+          bodySmall: TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
+          labelLarge: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          labelMedium: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+          labelSmall: TextStyle(fontWeight: FontWeight.normal, fontSize: 11),
+        ),
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -123,7 +158,16 @@ class _WeatherNewsAppState extends State<WeatherNewsApp> {
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF1A1A1A),
           foregroundColor: Colors.white,
+          elevation: 0,
         ),
+        cardTheme: CardTheme(
+          color: const Color(0xFF1A1A1A),
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        dividerColor: Colors.grey.withOpacity(0.3),
       ),
       themeMode: _themeMode,
       home: homeWidget,

@@ -18,7 +18,7 @@ class ArticleDetailPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () {
-              // TODO: Implement share functionality
+              // TODO: Реалізувати функціональність поділу
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Share functionality coming soon!'),
@@ -29,7 +29,7 @@ class ArticleDetailPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.bookmark_border),
             onPressed: () {
-              // TODO: Implement save functionality
+              // TODO: Реалізувати функціональність збереження
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(const SnackBar(content: Text('Article saved!')));
@@ -41,7 +41,7 @@ class ArticleDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Article image
+            // Зображення статті
             if (article.imageUrl != null)
               Container(
                 width: double.infinity,
@@ -104,13 +104,13 @@ class ArticleDetailPage extends StatelessWidget {
                 ),
               ),
 
-            // Article content
+            // Вміст статті
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Source and date
+                  // Джерело та дата
                   Row(
                     children: [
                       Container(
@@ -150,7 +150,7 @@ class ArticleDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Title
+                  // Заголовок
                   Text(
                     article.title,
                     style: const TextStyle(
@@ -161,7 +161,7 @@ class ArticleDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Description
+                  // Опис
                   Text(
                     article.description,
                     style: const TextStyle(
@@ -172,7 +172,7 @@ class ArticleDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Content
+                  // Вміст
                   if (article.content.isNotEmpty) ...[
                     const Text(
                       'Full Article:',
@@ -189,7 +189,7 @@ class ArticleDetailPage extends StatelessWidget {
                     const SizedBox(height: 24),
                   ],
 
-                  // Read more button
+                  // Кнопка "Читати далі"
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(

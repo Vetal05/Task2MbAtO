@@ -30,7 +30,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
           final jsonMap = json.decode(a.articleJson) as Map<String, dynamic>;
           return ArticleModel.fromJson(jsonMap);
         } catch (e) {
-          // Fallback: construct from database fields
+          // Резервний варіант: конструюємо з полів бази даних
           return ArticleModel(
             id: a.id,
             title: a.title,
@@ -53,7 +53,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
   @override
   Future<void> saveArticle(ArticleModel article) async {
     try {
-      // Check if article already exists
+      // Перевіряємо, чи стаття вже існує
       final existing =
           await (_database.select(_database.newsCache)
             ..where((t) => t.id.equals(article.id))).getSingleOrNull();
@@ -61,7 +61,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
       final articleJson = json.encode(article.toJson());
 
       if (existing != null) {
-        // Update existing
+        // Оновлюємо існуючу
         await (_database.update(_database.newsCache)
           ..where((t) => t.id.equals(article.id))).write(
           NewsCacheCompanion(
@@ -71,7 +71,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
           ),
         );
       } else {
-        // Insert new
+        // Вставляємо нову
         await _database
             .into(_database.newsCache)
             .insert(
@@ -102,14 +102,14 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
   @override
   Future<void> removeArticle(ArticleModel article) async {
     try {
-      // Check if article exists
+      // Перевіряємо, чи стаття існує
       final existing =
           await (_database.select(_database.newsCache)
             ..where((t) => t.id.equals(article.id))).getSingleOrNull();
 
       if (existing != null) {
-        // If article was only saved (not cached), delete it
-        // Otherwise just mark as not saved
+        // Якщо стаття була тільки збережена (не закешована), видаляємо її
+        // Інакше просто позначаємо як не збережену
         await (_database.update(_database.newsCache)..where(
           (t) => t.id.equals(article.id),
         )).write(const NewsCacheCompanion(isSaved: Value(false)));

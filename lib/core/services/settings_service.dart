@@ -7,11 +7,11 @@ class SettingsService {
   static AuthRepository? _authRepository;
 
   static Future<void> init() async {
-    // Get AuthRepository from service locator
+    // Отримуємо AuthRepository з service locator
     try {
       _authRepository = serviceLocator.get<AuthRepository>();
     } catch (e) {
-      // Service locator might not be initialized yet
+      // Service locator може бути ще не ініціалізовано
       print('SettingsService: AuthRepository not available yet');
     }
   }
@@ -34,7 +34,7 @@ class SettingsService {
     try {
       return await repo.getUserSettings();
     } catch (e) {
-      // Fallback to default settings if error
+      // Резервний варіант до налаштувань за замовчуванням при помилці
       return const UserSettings();
     }
   }
@@ -51,10 +51,10 @@ class SettingsService {
     }
   }
 
-  // Temperature unit settings
+  // Налаштування одиниці температури
   static bool get isCelsius {
-    // This is a synchronous getter, so we can't call async method
-    // Return default value - actual value should be loaded from user settings
+    // Це синхронний getter, тому не можемо викликати async метод
+    // Повертаємо значення за замовчуванням - фактичне значення має завантажуватися з налаштувань користувача
     return true;
   }
 
@@ -69,10 +69,10 @@ class SettingsService {
     await _saveSettings(updatedSettings);
   }
 
-  // Theme settings
+  // Налаштування теми
   static String get themeMode {
-    // This is a synchronous getter, so we can't call async method
-    // Return default value - actual value should be loaded from user settings
+    // Це синхронний getter, тому не можемо викликати async метод
+    // Повертаємо значення за замовчуванням - фактичне значення має завантажуватися з налаштувань користувача
     return 'dark';
   }
 
@@ -87,9 +87,9 @@ class SettingsService {
     await _saveSettings(updatedSettings);
   }
 
-  // Default city settings
+  // Налаштування міста за замовчуванням
   static String? get defaultCityName {
-    // Synchronous getter - return null
+    // Синхронний getter - повертаємо null
     return null;
   }
 

@@ -58,7 +58,7 @@ class _CitySearchWidgetState extends State<CitySearchWidget> {
       _showResults = true;
     });
 
-    // Debounce search to avoid too many API calls
+    // Debounce пошуку, щоб уникнути занадто багатьох API викликів
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       try {
         final results = await OpenWeatherGeocodingService.searchLocations(
@@ -93,7 +93,7 @@ class _CitySearchWidgetState extends State<CitySearchWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Search field
+        // Поле пошуку
         TextField(
           controller: _searchController,
           focusNode: _searchFocusNode,
@@ -128,7 +128,7 @@ class _CitySearchWidgetState extends State<CitySearchWidget> {
         ),
         const SizedBox(height: 8),
 
-        // Search results
+        // Результати пошуку
         if (_showResults)
           Container(
             decoration: BoxDecoration(

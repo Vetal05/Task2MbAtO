@@ -37,7 +37,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
         await localDataSource.cacheWeather(weatherModel);
         return weatherModel;
       } catch (e) {
-        // Try to get cached data if network fails
+        // Намагаємося отримати закешовані дані, якщо мережа не працює
         final cachedWeather = await localDataSource.getCachedWeather();
         if (cachedWeather != null) {
           return cachedWeather;
@@ -66,7 +66,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
           longitude: longitude,
           cityName: cityName,
         );
-        // Convert WeatherModel to Forecast
+        // Конвертуємо WeatherModel в Forecast
         return forecastModels
             .map(
               (weather) => Forecast(

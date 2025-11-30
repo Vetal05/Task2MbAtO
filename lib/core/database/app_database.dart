@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 
 part 'app_database.g.dart';
 
-// Weather table
+// Таблиця погоди
 class WeatherCache extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get cityName => text()();
@@ -28,10 +28,10 @@ class WeatherCache extends Table {
   IntColumn get sunriseMs => integer()();
   IntColumn get sunsetMs => integer()();
   IntColumn get timestampMs => integer()();
-  TextColumn get weatherJson => text()(); // Full JSON for easy conversion
+  TextColumn get weatherJson => text()(); // Повний JSON для легкого перетворення
 }
 
-// News articles table
+// Таблиця новин
 class NewsCache extends Table {
   TextColumn get id => text()();
   TextColumn get title => text()();
@@ -43,15 +43,15 @@ class NewsCache extends Table {
   TextColumn get source => text()();
   TextColumn get author => text().nullable()();
   TextColumn get category => text()();
-  TextColumn get articleJson => text()(); // Full JSON for easy conversion
-  IntColumn get savedAtMs => integer()(); // When it was saved
+  TextColumn get articleJson => text()(); // Повний JSON для легкого перетворення
+  IntColumn get savedAtMs => integer()(); // Коли було збережено
   BoolColumn get isSaved => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};
 }
 
-// Cities/Locations table
+// Таблиця міст/локацій
 class CitiesCache extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
@@ -67,7 +67,7 @@ class CitiesCache extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
-  // Constructor for testing with custom database
+  // Конструктор для тестування з користувацькою базою даних
   AppDatabase.test(LazyDatabase db) : super(db);
 
   @override
@@ -80,7 +80,7 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // Add migrations here if needed
+        // Додати міграції тут, якщо потрібно
       },
     );
   }

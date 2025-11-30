@@ -7,6 +7,8 @@ import 'package:weather_news_app/features/weather/presentation/bloc/weather_bloc
 import 'package:weather_news_app/features/news/presentation/bloc/news_bloc.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Dependency Injection Tests', () {
     late AppDatabase testDatabase;
 
@@ -15,7 +17,8 @@ void main() {
       testDatabase = AppDatabase.test(
         LazyDatabase(() async => NativeDatabase.memory()),
       );
-      await configureDependencies(testDatabase: testDatabase);
+      // Skip Hive initialization to avoid plugin issues
+      await configureDependencies(testDatabase: testDatabase, skipHiveInit: true);
     });
 
     tearDown(() async {

@@ -5,41 +5,41 @@ import '../constants/app_constants.dart';
 class ApiKeyService {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
-  // Keys for secure storage
+  // Ключі для безпечного сховища
   static const String _openWeatherApiKeyKey = 'openweather_api_key';
   static const String _newsApiKeyKey = 'news_api_key';
 
-  // Fallback to constants if secure storage fails
+  // Резервний варіант до констант, якщо безпечне сховище не працює
   static String _defaultOpenWeatherApiKey = AppConstants.openWeatherApiKey;
   static String _defaultNewsApiKey = AppConstants.newsApiKey;
 
-  /// Initialize API keys from environment variables and secure storage
+  /// Ініціалізує API ключі з змінних середовища та безпечного сховища
   static Future<void> init() async {
     try {
-      // Try to load from .env file first (for development)
+      // Спочатку намагаємося завантажити з .env файлу (для розробки)
       await dotenv.load(fileName: '.env');
     } catch (e) {
-      // .env file might not exist, that's okay
+      // .env файл може не існувати, це нормально
       print('⚠️ .env file not found, using defaults or secure storage');
     }
 
-    // Try to load from environment variables (only if dotenv is initialized)
+    // Намагаємося завантажити з змінних середовища (тільки якщо dotenv ініціалізовано)
     String? envOpenWeatherKey;
     String? envNewsKey;
-    
+
     try {
       if (dotenv.isInitialized) {
         envOpenWeatherKey = dotenv.env['OPENWEATHER_API_KEY'];
         envNewsKey = dotenv.env['NEWS_API_KEY'];
       }
     } catch (e) {
-      // dotenv might not be initialized, that's okay
+      // dotenv може бути не ініціалізовано, це нормально
       print('⚠️ dotenv not initialized, using defaults or secure storage');
     }
 
     if (envOpenWeatherKey != null && envOpenWeatherKey.isNotEmpty) {
       _defaultOpenWeatherApiKey = envOpenWeatherKey;
-      // Save to secure storage
+      // Зберігаємо в безпечне сховище
       await _storage.write(
         key: _openWeatherApiKeyKey,
         value: envOpenWeatherKey,
@@ -48,37 +48,37 @@ class ApiKeyService {
 
     if (envNewsKey != null && envNewsKey.isNotEmpty) {
       _defaultNewsApiKey = envNewsKey;
-      // Save to secure storage
+      // Зберігаємо в безпечне сховище
       await _storage.write(key: _newsApiKeyKey, value: envNewsKey);
     }
   }
 
-  /// Get OpenWeatherMap API key
-  /// Priority: Secure Storage > Environment Variables > Constants
+  /// Отримує API ключ OpenWeatherMap
+  /// Пріоритет: Безпечне сховище > Змінні середовища > Константи
   static Future<String> getOpenWeatherApiKey() async {
     try {
-      // First try secure storage
+      // Спочатку намагаємося з безпечного сховища
       final storedKey = await _storage.read(key: _openWeatherApiKeyKey);
       if (storedKey != null && storedKey.isNotEmpty) {
         return storedKey;
       }
 
-      // Then try environment variables (only if dotenv is initialized)
+      // Потім намагаємося з змінних середовища (тільки якщо dotenv ініціалізовано)
       String? envKey;
       try {
         if (dotenv.isInitialized) {
           envKey = dotenv.env['OPENWEATHER_API_KEY'];
         }
       } catch (e) {
-        // dotenv might not be initialized, skip
+        // dotenv може бути не ініціалізовано, пропускаємо
       }
       if (envKey != null && envKey.isNotEmpty) {
-        // Save to secure storage for next time
+        // Зберігаємо в безпечне сховище для наступного разу
         await _storage.write(key: _openWeatherApiKeyKey, value: envKey);
         return envKey;
       }
 
-      // Fallback to constants
+      // Резервний варіант до констант
       return _defaultOpenWeatherApiKey;
     } catch (e) {
       print('⚠️ Error getting OpenWeather API key: $e');
@@ -86,32 +86,32 @@ class ApiKeyService {
     }
   }
 
-  /// Get News API key
-  /// Priority: Secure Storage > Environment Variables > Constants
+  /// Отримує API ключ News
+  /// Пріоритет: Безпечне сховище > Змінні середовища > Константи
   static Future<String> getNewsApiKey() async {
     try {
-      // First try secure storage
+      // Спочатку намагаємося з безпечного сховища
       final storedKey = await _storage.read(key: _newsApiKeyKey);
       if (storedKey != null && storedKey.isNotEmpty) {
         return storedKey;
       }
 
-      // Then try environment variables (only if dotenv is initialized)
+      // Потім намагаємося з змінних середовища (тільки якщо dotenv ініціалізовано)
       String? envKey;
       try {
         if (dotenv.isInitialized) {
           envKey = dotenv.env['NEWS_API_KEY'];
         }
       } catch (e) {
-        // dotenv might not be initialized, skip
+        // dotenv може бути не ініціалізовано, пропускаємо
       }
       if (envKey != null && envKey.isNotEmpty) {
-        // Save to secure storage for next time
+        // Зберігаємо в безпечне сховище для наступного разу
         await _storage.write(key: _newsApiKeyKey, value: envKey);
         return envKey;
       }
 
-      // Fallback to constants
+      // Резервний варіант до констант
       return _defaultNewsApiKey;
     } catch (e) {
       print('⚠️ Error getting News API key: $e');
@@ -119,7 +119,7 @@ class ApiKeyService {
     }
   }
 
-  /// Save API keys to secure storage
+  /// Зберігає API ключі в безпечне сховище
   static Future<void> saveOpenWeatherApiKey(String key) async {
     try {
       await _storage.write(key: _openWeatherApiKeyKey, value: key);
@@ -129,7 +129,7 @@ class ApiKeyService {
     }
   }
 
-  /// Save News API key to secure storage
+  /// Зберігає API ключ News в безпечне сховище
   static Future<void> saveNewsApiKey(String key) async {
     try {
       await _storage.write(key: _newsApiKeyKey, value: key);
@@ -139,7 +139,7 @@ class ApiKeyService {
     }
   }
 
-  /// Clear all stored API keys (for logout/security)
+  /// Очищає всі збережені API ключі (для виходу/безпеки)
   static Future<void> clearApiKeys() async {
     try {
       await _storage.delete(key: _openWeatherApiKeyKey);

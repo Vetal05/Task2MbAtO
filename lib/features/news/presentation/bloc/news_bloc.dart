@@ -50,9 +50,9 @@ class NewsBloc extends ChangeNotifier {
     _emit(NewsLoading());
 
     try {
-      // Use default parameters if none provided
+      // Використовуємо параметри за замовчуванням, якщо не надано
       final articles = await this.getTopHeadlines(
-        country: country ?? 'us', // Default to US headlines
+        country: country ?? 'us', // За замовчуванням новини США
         category: category,
         sources: sources,
         query: query,

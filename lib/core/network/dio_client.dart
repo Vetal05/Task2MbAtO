@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-/// Dio client with interceptors for logging and retry
+/// Dio клієнт з interceptors для логування та повторних спроб
 class DioClient {
   late final Dio _dio;
 
   DioClient() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: '', // Will be set per request
+        baseUrl: '', // Буде встановлено для кожного запиту
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),
         headers: {
@@ -18,25 +18,25 @@ class DioClient {
       ),
     );
 
-    // Add interceptors
+    // Додаємо interceptors
     _dio.interceptors.add(_LoggingInterceptor());
     _dio.interceptors.add(_RetryInterceptor(_dio));
   }
 
   Dio get dio => _dio;
 
-  /// Get Dio instance configured for OpenWeatherMap API
+  /// Отримує екземпляр Dio, налаштований для OpenWeatherMap API
   Dio getOpenWeatherDio() {
     return _dio;
   }
 
-  /// Get Dio instance configured for NewsAPI
+  /// Отримує екземпляр Dio, налаштований для NewsAPI
   Dio getNewsDio() {
     return _dio;
   }
 }
 
-/// Logging interceptor - logs all requests and responses
+/// Interceptor для логування - логує всі запити та відповіді
 class _LoggingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -59,7 +59,7 @@ class _LoggingInterceptor extends Interceptor {
         '✅ Dio Response: ${response.statusCode} ${response.requestOptions.uri}',
       );
       if (response.data != null && response.data is Map) {
-        // Log truncated response (first 500 chars)
+        // Логуємо скорочену відповідь (перші 500 символів)
         final dataStr = response.data.toString();
         if (dataStr.length > 500) {
           print('✅ Response Body: ${dataStr.substring(0, 500)}...');
@@ -85,7 +85,7 @@ class _LoggingInterceptor extends Interceptor {
   }
 }
 
-/// Retry interceptor - retries failed requests
+/// Interceptor для повторних спроб - повторює невдалі запити
 class _RetryInterceptor extends Interceptor {
   static const int maxRetries = 3;
   static const Duration retryDelay = Duration(seconds: 2);
@@ -99,7 +99,7 @@ class _RetryInterceptor extends Interceptor {
     if (_shouldRetry(err)) {
       final options = err.requestOptions;
 
-      // Check retry count
+      // Перевіряємо кількість повторних спроб
       final retryCount = (options.extra['retryCount'] as int?) ?? 0;
 
       if (retryCount < maxRetries) {
@@ -111,11 +111,11 @@ class _RetryInterceptor extends Interceptor {
           );
         }
 
-        // Wait before retry
+        // Чекаємо перед повторною спробою
         await Future.delayed(retryDelay);
 
         try {
-          // Retry the request using the same Dio instance
+          // Повторюємо запит, використовуючи той самий екземпляр Dio
           final response = await _dioInstance.request(
             options.path,
             data: options.data,
@@ -130,7 +130,7 @@ class _RetryInterceptor extends Interceptor {
           handler.resolve(response);
           return;
         } catch (e) {
-          // If retry fails, continue with error
+          // Якщо повторна спроба не вдалася, продовжуємо з помилкою
           if (kDebugMode) {
             print('❌ Retry failed: $e');
           }
@@ -142,7 +142,7 @@ class _RetryInterceptor extends Interceptor {
   }
 
   bool _shouldRetry(DioException err) {
-    // Retry on network errors or server errors (5xx)
+    // Повторюємо при помилках мережі або помилках сервера (5xx)
     return err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||

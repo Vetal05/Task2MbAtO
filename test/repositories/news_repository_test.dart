@@ -225,7 +225,7 @@ void main() {
   group('saveArticle', () {
     test('should save article successfully', () async {
       // Arrange
-      final article = Article(
+      final article = ArticleModel(
         id: '1',
         title: 'Test Article',
         description: 'Test Description',

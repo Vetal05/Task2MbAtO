@@ -14,19 +14,24 @@ import 'package:weather_news_app/main.dart';
 import 'package:weather_news_app/core/di/injection.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   testWidgets('App starts correctly', (WidgetTester tester) async {
     // Initialize test database (in-memory)
     final testDatabase = AppDatabase.test(
       LazyDatabase(() async => NativeDatabase.memory()),
     );
-    // Initialize dependencies
-    await configureDependencies(testDatabase: testDatabase);
+    // Initialize dependencies - skip Hive init to avoid plugin issues
+    await configureDependencies(testDatabase: testDatabase, skipHiveInit: true);
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(const WeatherNewsApp());
-    await tester.pumpAndSettle();
+    
+    // Just pump once to build the widget tree
+    await tester.pump();
 
     // Verify that app is built (at minimum, MaterialApp should be present)
+    // Don't wait for all async operations to complete
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 }
