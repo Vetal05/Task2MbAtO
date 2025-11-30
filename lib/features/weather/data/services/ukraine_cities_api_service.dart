@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../domain/entities/ukraine_city.dart';
 
@@ -59,7 +60,7 @@ class UkraineCitiesApiService {
         throw Exception('Failed to load cities: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error loading cities from API: $e');
+      debugPrint('Error loading cities from API: $e');
       // Повертаємо локальний список як fallback
       return _getLocalCities();
     }

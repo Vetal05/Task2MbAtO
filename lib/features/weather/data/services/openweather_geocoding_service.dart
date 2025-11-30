@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../domain/entities/ukraine_city.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -46,11 +47,11 @@ class OpenWeatherGeocodingService {
 
         return locations;
       } else {
-        print('Geocoding API error: ${response.statusCode}');
+        debugPrint('Geocoding API error: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      print('Error searching locations: $e');
+      debugPrint('Error searching locations: $e');
       return [];
     }
   }
