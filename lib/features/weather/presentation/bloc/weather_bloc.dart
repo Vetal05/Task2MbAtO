@@ -123,7 +123,7 @@ class WeatherBloc extends ChangeNotifier {
     _emit(CitiesSearchLoading());
 
     try {
-      final cities = await this.searchCities(query);
+      final cities = await searchCities(query);
       _emit(CitiesSearchLoaded(cities));
     } catch (e) {
       _emit(CitiesSearchError(e.toString()));
@@ -134,7 +134,7 @@ class WeatherBloc extends ChangeNotifier {
     _emit(LocationLoading());
 
     try {
-      final location = await this.getCurrentLocation();
+      final location = await getCurrentLocation();
       _emit(LocationLoaded(location));
     } catch (e) {
       _emit(LocationError(e.toString()));
@@ -143,7 +143,7 @@ class WeatherBloc extends ChangeNotifier {
 
   Future<void> saveCityData(Location city) async {
     try {
-      await this.saveCity(city);
+      await saveCity(city);
       _emit(CitySaved());
     } catch (e) {
       _emit(WeatherError(e.toString()));
