@@ -16,8 +16,15 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+<<<<<<< Updated upstream
           flutter-version: "3.31.0"
           channel: "stable"
+=======
+          flutter-version: "3.27.0"
+
+      - name: Verify Flutter version
+        run: flutter --version
+>>>>>>> Stashed changes
 
       - name: Install dependencies
         run: flutter pub get
@@ -44,8 +51,15 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+<<<<<<< Updated upstream
           flutter-version: "3.31.0"
           channel: "stable"
+=======
+          flutter-version: "3.27.0"
+
+      - name: Verify Flutter version
+        run: flutter --version
+>>>>>>> Stashed changes
 
       - name: Install dependencies
         run: flutter pub get
