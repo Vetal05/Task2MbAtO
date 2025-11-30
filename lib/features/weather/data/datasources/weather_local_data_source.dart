@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:drift/drift.dart';
 import '../../../../core/database/app_database.dart';
 import '../models/weather_model.dart';
@@ -102,7 +103,7 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
           );
     } catch (e) {
       // Обробляємо помилку безшумно або логуємо
-      print('Error caching weather: $e');
+      debugPrint('Error caching weather: $e');
     }
   }
 
@@ -154,7 +155,7 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
             );
       }
     } catch (e) {
-      print('Error saving city: $e');
+      debugPrint('Error saving city: $e');
     }
   }
 
@@ -165,7 +166,7 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
         (t) => t.name.equals(city.name) & t.country.equals(city.country),
       )).go();
     } catch (e) {
-      print('Error removing city: $e');
+      debugPrint('Error removing city: $e');
     }
   }
 
@@ -230,7 +231,7 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
             );
       }
     } catch (e) {
-      print('Error setting current location: $e');
+      debugPrint('Error setting current location: $e');
     }
   }
 }
