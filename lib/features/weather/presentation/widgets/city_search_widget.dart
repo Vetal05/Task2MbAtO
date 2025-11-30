@@ -101,14 +101,14 @@ class _CitySearchWidgetState extends State<CitySearchWidget> {
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Введіть назву міста, села або селища...',
-            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.7)),
-            prefixIcon: Icon(Icons.search, color: Colors.grey.withOpacity(0.7)),
+            hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.7)),
+            prefixIcon: Icon(Icons.search, color: Colors.grey.withValues(alpha: 0.7)),
             suffixIcon:
                 _searchController.text.isNotEmpty
                     ? IconButton(
                       icon: Icon(
                         Icons.clear,
-                        color: Colors.grey.withOpacity(0.7),
+                        color: Colors.grey.withValues(alpha: 0.7),
                       ),
                       onPressed: () {
                         setState(() {
@@ -134,7 +134,7 @@ class _CitySearchWidgetState extends State<CitySearchWidget> {
             decoration: BoxDecoration(
               color: const Color(0xFF2D2D2D),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.withOpacity(0.3)),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             child:
                 _isSearching
@@ -180,7 +180,7 @@ class _CitySearchWidgetState extends State<CitySearchWidget> {
                             style: const TextStyle(color: Colors.grey),
                           ),
                           onTap: () => _onCitySelected(city),
-                          hoverColor: Colors.grey.withOpacity(0.1),
+                          hoverColor: Colors.grey.withValues(alpha: 0.1),
                         );
                       },
                     ),

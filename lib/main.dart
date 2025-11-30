@@ -123,7 +123,7 @@ class _WeatherNewsAppState extends State<WeatherNewsApp> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: Colors.grey.shade50,
           elevation: 2,
           shape: RoundedRectangleBorder(
@@ -160,14 +160,14 @@ class _WeatherNewsAppState extends State<WeatherNewsApp> {
           foregroundColor: Colors.white,
           elevation: 0,
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: const Color(0xFF1A1A1A),
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        dividerColor: Colors.grey.withOpacity(0.3),
+        dividerColor: Colors.grey.withValues(alpha: 0.3),
       ),
       themeMode: _themeMode,
       home: homeWidget,

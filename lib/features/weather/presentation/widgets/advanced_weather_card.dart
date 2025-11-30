@@ -1098,7 +1098,7 @@ class TemperatureGraphPainter extends CustomPainter {
 
     final fillPaint =
         Paint()
-          ..color = Colors.yellow.withOpacity(0.3)
+          ..color = Colors.yellow.withValues(alpha: 0.3)
           ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -1284,7 +1284,7 @@ class PrecipitationGraphPainter extends CustomPainter {
 
     final fillPaint =
         Paint()
-          ..color = Colors.blue.withOpacity(0.3)
+          ..color = Colors.blue.withValues(alpha: 0.3)
           ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -1454,7 +1454,7 @@ class WindGraphPainter extends CustomPainter {
 
     final fillPaint =
         Paint()
-          ..color = Colors.green.withOpacity(0.3)
+          ..color = Colors.green.withValues(alpha: 0.3)
           ..style = PaintingStyle.fill;
 
     final path = Path();

@@ -235,10 +235,10 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.yellow : Colors.grey.withOpacity(0.1),
+          color: isSelected ? Colors.yellow : Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Colors.yellow : Colors.grey.withOpacity(0.3),
+            color: isSelected ? Colors.yellow : Colors.grey.withValues(alpha: 0.3),
             width: 2,
           ),
         ),
@@ -393,10 +393,10 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.yellow : Colors.grey.withOpacity(0.1),
+          color: isSelected ? Colors.yellow : Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Colors.yellow : Colors.grey.withOpacity(0.3),
+            color: isSelected ? Colors.yellow : Colors.grey.withValues(alpha: 0.3),
             width: 2,
           ),
         ),
@@ -453,9 +453,9 @@ class _SettingsPageState extends State<SettingsPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.yellow.withOpacity(0.1),
+                color: Colors.yellow.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.yellow.withOpacity(0.3)),
+                border: Border.all(color: Colors.yellow.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -498,9 +498,9 @@ class _SettingsPageState extends State<SettingsPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
               ),
               child: const Row(
                 children: [
@@ -585,7 +585,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Text(
                     formattedDate,
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       fontSize: 16,
                     ),
                   ),
@@ -597,9 +597,9 @@ class _SettingsPageState extends State<SettingsPage> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.yellow.withOpacity(0.1),
+              color: Colors.yellow.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.yellow.withOpacity(0.3)),
+              border: Border.all(color: Colors.yellow.withValues(alpha: 0.3)),
             ),
             child: const Row(
               children: [
