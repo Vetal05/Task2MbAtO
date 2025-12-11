@@ -20,7 +20,7 @@ class ApiKeyService {
       // Спочатку намагаємося завантажити з .env файлу (для розробки)
       await dotenv.load(fileName: '.env');
     } catch (e) {
-      // .env файл може не існувати, це нормально
+      // .env файл може не існувати, це нормально (особливо в release build)
       debugPrint('⚠️ .env file not found, using defaults or secure storage');
     }
 
@@ -38,19 +38,49 @@ class ApiKeyService {
       debugPrint('⚠️ dotenv not initialized, using defaults or secure storage');
     }
 
+    // Якщо знайшли ключі з .env, зберігаємо їх
     if (envOpenWeatherKey != null && envOpenWeatherKey.isNotEmpty) {
       _defaultOpenWeatherApiKey = envOpenWeatherKey;
-      // Зберігаємо в безпечне сховище
-      await _storage.write(
-        key: _openWeatherApiKeyKey,
-        value: envOpenWeatherKey,
-      );
+      try {
+        await _storage.write(
+          key: _openWeatherApiKeyKey,
+          value: envOpenWeatherKey,
+        );
+      } catch (e) {
+        debugPrint('⚠️ Failed to save OpenWeather key to secure storage: $e');
+        // Продовжуємо з дефолтним значенням
+      }
     }
 
     if (envNewsKey != null && envNewsKey.isNotEmpty) {
       _defaultNewsApiKey = envNewsKey;
-      // Зберігаємо в безпечне сховище
-      await _storage.write(key: _newsApiKeyKey, value: envNewsKey);
+      try {
+        await _storage.write(key: _newsApiKeyKey, value: envNewsKey);
+      } catch (e) {
+        debugPrint('⚠️ Failed to save News key to secure storage: $e');
+        // Продовжуємо з дефолтним значенням
+      }
+    }
+
+    // Перевіряємо чи є збережені ключі в secure storage (для release build)
+    try {
+      final storedOpenWeatherKey = await _storage.read(key: _openWeatherApiKeyKey);
+      if (storedOpenWeatherKey != null && storedOpenWeatherKey.isNotEmpty) {
+        _defaultOpenWeatherApiKey = storedOpenWeatherKey;
+      }
+    } catch (e) {
+      debugPrint('⚠️ Failed to read OpenWeather key from secure storage: $e');
+      // Використовуємо дефолтне значення
+    }
+
+    try {
+      final storedNewsKey = await _storage.read(key: _newsApiKeyKey);
+      if (storedNewsKey != null && storedNewsKey.isNotEmpty) {
+        _defaultNewsApiKey = storedNewsKey;
+      }
+    } catch (e) {
+      debugPrint('⚠️ Failed to read News key from secure storage: $e');
+      // Використовуємо дефолтне значення
     }
   }
 
@@ -59,9 +89,14 @@ class ApiKeyService {
   static Future<String> getOpenWeatherApiKey() async {
     try {
       // Спочатку намагаємося з безпечного сховища
-      final storedKey = await _storage.read(key: _openWeatherApiKeyKey);
-      if (storedKey != null && storedKey.isNotEmpty) {
-        return storedKey;
+      try {
+        final storedKey = await _storage.read(key: _openWeatherApiKeyKey);
+        if (storedKey != null && storedKey.isNotEmpty) {
+          return storedKey;
+        }
+      } catch (e) {
+        debugPrint('⚠️ Failed to read OpenWeather key from secure storage: $e');
+        // Продовжуємо з іншими джерелами
       }
 
       // Потім намагаємося з змінних середовища (тільки якщо dotenv ініціалізовано)
@@ -75,14 +110,19 @@ class ApiKeyService {
       }
       if (envKey != null && envKey.isNotEmpty) {
         // Зберігаємо в безпечне сховище для наступного разу
-        await _storage.write(key: _openWeatherApiKeyKey, value: envKey);
+        try {
+          await _storage.write(key: _openWeatherApiKeyKey, value: envKey);
+        } catch (e) {
+          debugPrint('⚠️ Failed to save OpenWeather key: $e');
+        }
         return envKey;
       }
 
-      // Резервний варіант до констант
+      // Резервний варіант до констант (завжди має працювати)
       return _defaultOpenWeatherApiKey;
     } catch (e) {
       debugPrint('⚠️ Error getting OpenWeather API key: $e');
+      // Завжди повертаємо дефолтне значення як останній резерв
       return _defaultOpenWeatherApiKey;
     }
   }
@@ -92,9 +132,14 @@ class ApiKeyService {
   static Future<String> getNewsApiKey() async {
     try {
       // Спочатку намагаємося з безпечного сховища
-      final storedKey = await _storage.read(key: _newsApiKeyKey);
-      if (storedKey != null && storedKey.isNotEmpty) {
-        return storedKey;
+      try {
+        final storedKey = await _storage.read(key: _newsApiKeyKey);
+        if (storedKey != null && storedKey.isNotEmpty) {
+          return storedKey;
+        }
+      } catch (e) {
+        debugPrint('⚠️ Failed to read News key from secure storage: $e');
+        // Продовжуємо з іншими джерелами
       }
 
       // Потім намагаємося з змінних середовища (тільки якщо dotenv ініціалізовано)
@@ -108,14 +153,19 @@ class ApiKeyService {
       }
       if (envKey != null && envKey.isNotEmpty) {
         // Зберігаємо в безпечне сховище для наступного разу
-        await _storage.write(key: _newsApiKeyKey, value: envKey);
+        try {
+          await _storage.write(key: _newsApiKeyKey, value: envKey);
+        } catch (e) {
+          debugPrint('⚠️ Failed to save News key: $e');
+        }
         return envKey;
       }
 
-      // Резервний варіант до констант
+      // Резервний варіант до констант (завжди має працювати)
       return _defaultNewsApiKey;
     } catch (e) {
       debugPrint('⚠️ Error getting News API key: $e');
+      // Завжди повертаємо дефолтне значення як останній резерв
       return _defaultNewsApiKey;
     }
   }
